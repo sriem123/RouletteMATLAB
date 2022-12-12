@@ -1,0 +1,302 @@
+classdef FinalProject < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure          matlab.ui.Figure
+        Gauge             matlab.ui.control.Gauge
+        HowmuchmoneydoyouwanttobetEditField  matlab.ui.control.NumericEditField
+        HowmuchmoneydoyouwanttobetLabel  matlab.ui.control.Label
+        YouwinEditField   matlab.ui.control.NumericEditField
+        YouwinLabel       matlab.ui.control.Label
+        EnterStraightBet13637for038for00EditField  matlab.ui.control.NumericEditField
+        EnterStraightBet13637for038for00Label  matlab.ui.control.Label
+        EnterStraightBet1DozenBet2OddEvenBet3HighLowBet4EditField  matlab.ui.control.NumericEditField
+        EnteratypeofbetStraightBet1DozenBet2OddEvenBet3HighLowBet4Label  matlab.ui.control.Label
+        TherollisSpinner  matlab.ui.control.Spinner
+        TherollisLabel    matlab.ui.control.Label
+        PlayButton        matlab.ui.control.Button
+    end
+
+    % Callbacks that handle component events
+    methods (Access = private)
+
+        % Button pushed function: PlayButton
+        function PlayButtonPushed(app, event)
+            
+            for i=1:5
+                pause(0.1);
+                r = randi([1 38]);
+                app.Gauge.Value = r;
+                app.TherollisSpinner.Value = r;
+            end
+            
+           
+            % Inputs
+            ta = app.EnterStraightBet1DozenBet2OddEvenBet3HighLowBet4EditField.Value;
+            tb = app.EnterStraightBet13637for038for00EditField.Value;
+            
+            % Straight Bet
+            if (ta == 1) && (tb == r)
+                m = app.HowmuchmoneydoyouwanttobetEditField.Value;
+                app.YouwinEditField.Value = (35 * m) + m;
+                app.Gauge.BackgroundColor = [0,1,0]; % Green
+                pause(1);
+            elseif ta == 1 
+                app.YouwinEditField.Value = 0;
+                app.Gauge.BackgroundColor = [1,0,0]; % Red
+                pause(100);
+            end
+            
+            % Dozen Bet
+            rolldozen = ceil(r/12);
+            if (ta == 2) && (tb == rolldozen) && (r ~= 37) && (r ~= 38)
+                m = app.HowmuchmoneydoyouwanttobetEditField.Value;
+                app.YouwinEditField.Value = (3 * m) + m;
+                app.Gauge.BackgroundColor = [0,1,0]; % Green
+                pause(100);
+            elseif ta == 2
+                app.YouwinEditField.Value = 0;
+                app.Gauge.BackgroundColor = [1,0,0]; % Red
+                pause(100);
+            end
+            
+            % Even/Odd Bet
+            if rem(r, 2) == 1
+                rolloddeven = 1;
+            else
+                rolloddeven = 2;
+            end
+
+            if (ta == 3) && (tb == rolloddeven) && (r ~= 37) && (r ~= 38)
+                m = app.HowmuchmoneydoyouwanttobetEditField.Value;
+                app.YouwinEditField.Value = (2 * m) + m;
+                app.Gauge.BackgroundColor = [0,1,0]; % Green
+                pause(100);
+            elseif ta == 3
+                app.YouwinEditField.Value = 0;
+                app.Gauge.BackgroundColor = [1,0,0]; % Red
+                pause(100);
+            end
+            
+            % High/Low Bet
+            if r < 19
+                rolllowhigh = 1;
+            else
+                rolllowhigh =  2;
+            end
+
+            if (ta == 4) && (tb == rolllowhigh) && (r ~= 37) && (r ~= 38)
+                m = app.HowmuchmoneydoyouwanttobetEditField.Value;
+                app.YouwinEditField.Value = (2 * m) + m;
+                app.Gauge.BackgroundColor = [0,1,0]; % Green
+                pause(100);
+            elseif ta ==4
+                app.YouwinEditField.Value = 0;
+                app.Gauge.BackgroundColor = [1,0,0]; % Red
+                pause(100);
+            end
+            
+          
+          
+          
+        end
+
+        % Callback function
+        function ReadButtonPushed(app, event)
+           
+        end
+
+        % Callback function
+        function OutputEditFieldValueChanged(app, event)
+            
+           
+        end
+
+        % Callback function
+        function OutputEditFieldValueChanging(app, event)
+      
+        end
+
+        % Value changed function: 
+        % EnterStraightBet1DozenBet2OddEvenBet3HighLowBet4EditField
+        function EnterStraightBet1DozenBet2OddEvenBet3HighLowBet4EditFieldValueChanged(app, event)
+            value = app.EnterStraightBet1DozenBet2OddEvenBet3HighLowBet4EditField.Value;
+            
+        end
+
+        % Value changed function: 
+        % EnterStraightBet13637for038for00EditField
+        function EnterStraightBet13637for038for00EditFieldValueChanged(app, event)
+            value = app.EnterStraightBet13637for038for00EditField.Value;
+            
+        end
+
+        % Value changed function: YouwinEditField
+        function YouwinEditFieldValueChanged(app, event)
+            value = app.YouwinEditField.Value;
+            
+        end
+
+        % Value changed function: 
+        % HowmuchmoneydoyouwanttobetEditField
+        function HowmuchmoneydoyouwanttobetEditFieldValueChanged(app, event)
+            value = app.HowmuchmoneydoyouwanttobetEditField.Value;
+            
+        end
+    end
+
+    % Component initialization
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Create UIFigure and hide until all components are created
+            app.UIFigure = uifigure('Visible', 'off');
+            app.UIFigure.Position = [100 100 640 480];
+            app.UIFigure.Name = 'MATLAB App';
+
+            % Create PlayButton
+            app.PlayButton = uibutton(app.UIFigure, 'push');
+            app.PlayButton.ButtonPushedFcn = createCallbackFcn(app, @PlayButtonPushed, true);
+            app.PlayButton.BackgroundColor = [0.4667 0.6745 0.1882];
+            app.PlayButton.FontName = 'Courier';
+            app.PlayButton.FontSize = 45;
+            app.PlayButton.FontWeight = 'bold';
+            app.PlayButton.FontColor = [1 1 1];
+            app.PlayButton.Position = [396 146 132 62];
+            app.PlayButton.Text = 'Play';
+
+            % Create TherollisLabel
+            app.TherollisLabel = uilabel(app.UIFigure);
+            app.TherollisLabel.BackgroundColor = [0.451 0 0.0392];
+            app.TherollisLabel.HorizontalAlignment = 'right';
+            app.TherollisLabel.FontName = 'Courier';
+            app.TherollisLabel.FontWeight = 'bold';
+            app.TherollisLabel.FontColor = [0.9412 0.9412 0.9412];
+            app.TherollisLabel.Position = [365 30 106 22];
+            app.TherollisLabel.Text = ' The roll is: ';
+
+            % Create TherollisSpinner
+            app.TherollisSpinner = uispinner(app.UIFigure);
+            app.TherollisSpinner.FontName = 'Courier';
+            app.TherollisSpinner.FontWeight = 'bold';
+            app.TherollisSpinner.BackgroundColor = [0.7098 0.6039 0.3412];
+            app.TherollisSpinner.Position = [486 30 100 22];
+
+            % Create EnteratypeofbetStraightBet1DozenBet2OddEvenBet3HighLowBet4Label
+            app.EnteratypeofbetStraightBet1DozenBet2OddEvenBet3HighLowBet4Label = uilabel(app.UIFigure);
+            app.EnteratypeofbetStraightBet1DozenBet2OddEvenBet3HighLowBet4Label.BackgroundColor = [0.451 0 0.0392];
+            app.EnteratypeofbetStraightBet1DozenBet2OddEvenBet3HighLowBet4Label.HorizontalAlignment = 'right';
+            app.EnteratypeofbetStraightBet1DozenBet2OddEvenBet3HighLowBet4Label.FontName = 'Courier';
+            app.EnteratypeofbetStraightBet1DozenBet2OddEvenBet3HighLowBet4Label.FontWeight = 'bold';
+            app.EnteratypeofbetStraightBet1DozenBet2OddEvenBet3HighLowBet4Label.FontColor = [1 1 1];
+            app.EnteratypeofbetStraightBet1DozenBet2OddEvenBet3HighLowBet4Label.Position = [351 358 157 70];
+            app.EnteratypeofbetStraightBet1DozenBet2OddEvenBet3HighLowBet4Label.Text = {'Enter a type of bet  '; 'Straight Bet: 1'; ' Dozen Bet: 2'; ' Odd/Even Bet: 3'; 'High/Low Bet: 4'};
+
+            % Create EnterStraightBet1DozenBet2OddEvenBet3HighLowBet4EditField
+            app.EnterStraightBet1DozenBet2OddEvenBet3HighLowBet4EditField = uieditfield(app.UIFigure, 'numeric');
+            app.EnterStraightBet1DozenBet2OddEvenBet3HighLowBet4EditField.ValueChangedFcn = createCallbackFcn(app, @EnterStraightBet1DozenBet2OddEvenBet3HighLowBet4EditFieldValueChanged, true);
+            app.EnterStraightBet1DozenBet2OddEvenBet3HighLowBet4EditField.FontWeight = 'bold';
+            app.EnterStraightBet1DozenBet2OddEvenBet3HighLowBet4EditField.BackgroundColor = [0.7098 0.6039 0.3412];
+            app.EnterStraightBet1DozenBet2OddEvenBet3HighLowBet4EditField.Position = [523 382 100 22];
+
+            % Create EnterStraightBet13637for038for00Label
+            app.EnterStraightBet13637for038for00Label = uilabel(app.UIFigure);
+            app.EnterStraightBet13637for038for00Label.BackgroundColor = [0.451 0 0.0392];
+            app.EnterStraightBet13637for038for00Label.HorizontalAlignment = 'right';
+            app.EnterStraightBet13637for038for00Label.FontName = 'Courier';
+            app.EnterStraightBet13637for038for00Label.FontWeight = 'bold';
+            app.EnterStraightBet13637for038for00Label.FontColor = [1 1 1];
+            app.EnterStraightBet13637for038for00Label.Position = [214 261 289 84];
+            app.EnterStraightBet13637for038for00Label.Text = {'Specify your bet. Enter the following: '; 'Straight| 1-36, 37 for 0, 38 for 00 '; 'Dozen| First: 1, Second: 2, Third: 3'; 'Even/Odd| Odd: 1, Even: 2'; 'High/Low| Low: 1, High: 2 '; ''; ''};
+
+            % Create EnterStraightBet13637for038for00EditField
+            app.EnterStraightBet13637for038for00EditField = uieditfield(app.UIFigure, 'numeric');
+            app.EnterStraightBet13637for038for00EditField.ValueChangedFcn = createCallbackFcn(app, @EnterStraightBet13637for038for00EditFieldValueChanged, true);
+            app.EnterStraightBet13637for038for00EditField.FontName = 'Courier';
+            app.EnterStraightBet13637for038for00EditField.FontWeight = 'bold';
+            app.EnterStraightBet13637for038for00EditField.BackgroundColor = [0.7098 0.6039 0.3412];
+            app.EnterStraightBet13637for038for00EditField.Position = [517 304 106 22];
+
+            % Create YouwinLabel
+            app.YouwinLabel = uilabel(app.UIFigure);
+            app.YouwinLabel.BackgroundColor = [0.451 0 0.0392];
+            app.YouwinLabel.HorizontalAlignment = 'right';
+            app.YouwinLabel.FontName = 'Courier';
+            app.YouwinLabel.FontWeight = 'bold';
+            app.YouwinLabel.FontColor = [1 1 1];
+            app.YouwinLabel.Position = [365 70 78 22];
+            app.YouwinLabel.Text = 'You win $ ';
+
+            % Create YouwinEditField
+            app.YouwinEditField = uieditfield(app.UIFigure, 'numeric');
+            app.YouwinEditField.ValueChangedFcn = createCallbackFcn(app, @YouwinEditFieldValueChanged, true);
+            app.YouwinEditField.FontName = 'Courier';
+            app.YouwinEditField.FontWeight = 'bold';
+            app.YouwinEditField.BackgroundColor = [0.7098 0.6039 0.3412];
+            app.YouwinEditField.Position = [458 70 100 22];
+
+            % Create HowmuchmoneydoyouwanttobetLabel
+            app.HowmuchmoneydoyouwanttobetLabel = uilabel(app.UIFigure);
+            app.HowmuchmoneydoyouwanttobetLabel.BackgroundColor = [0.451 0 0.0392];
+            app.HowmuchmoneydoyouwanttobetLabel.HorizontalAlignment = 'right';
+            app.HowmuchmoneydoyouwanttobetLabel.FontName = 'Courier';
+            app.HowmuchmoneydoyouwanttobetLabel.FontSize = 15;
+            app.HowmuchmoneydoyouwanttobetLabel.FontWeight = 'bold';
+            app.HowmuchmoneydoyouwanttobetLabel.FontColor = [1 1 1];
+            app.HowmuchmoneydoyouwanttobetLabel.Position = [183 442 325 22];
+            app.HowmuchmoneydoyouwanttobetLabel.Text = 'How much money do you want to bet? ';
+
+            % Create HowmuchmoneydoyouwanttobetEditField
+            app.HowmuchmoneydoyouwanttobetEditField = uieditfield(app.UIFigure, 'numeric');
+            app.HowmuchmoneydoyouwanttobetEditField.ValueChangedFcn = createCallbackFcn(app, @HowmuchmoneydoyouwanttobetEditFieldValueChanged, true);
+            app.HowmuchmoneydoyouwanttobetEditField.FontName = 'Courier';
+            app.HowmuchmoneydoyouwanttobetEditField.FontSize = 15;
+            app.HowmuchmoneydoyouwanttobetEditField.FontWeight = 'bold';
+            app.HowmuchmoneydoyouwanttobetEditField.BackgroundColor = [0.7098 0.6039 0.3412];
+            app.HowmuchmoneydoyouwanttobetEditField.Position = [523 442 100 22];
+
+            % Create Gauge
+            app.Gauge = uigauge(app.UIFigure, 'circular');
+            app.Gauge.Limits = [1 38];
+            app.Gauge.MajorTicks = [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37];
+            app.Gauge.MajorTickLabels = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '37', '38'};
+            app.Gauge.MinorTicks = [2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36];
+            app.Gauge.ScaleColors = [0.4667 0.6745 0.1882;0.4667 0.6745 0.1882;0.149 0.149 0.149;1 0 0;0 0 0;1 0 0;0 0 0;1 0 0;0 0 0;1 0 0;0 0 0;1 0 0;0 0 0;1 0 0;0 0 0;1 0 0;0 0 0;1 0 0;0 0 0;1 0 0;0 0 0;1 0 0;0 0 0;1 0 0;0 0 0;1 0 0;0 0 0;1 0 0;0 0 0;1 0 0;0 0 0;1 0 0;0 0 0;1 0 0;0 0 0;1 0 0;0 0 0];
+            app.Gauge.ScaleColorLimits = [37 38;36 37;35 36;34 35;33 34;32 33;31 32;30 31;29 30;28 29;27 28;26 27;25 26;24 25;23 24;22 23;21 22;20 21;19 20;18 19;17 18;16 17;15 16;14 15;13 14;12 13;11 12;10 11;9 10;8 9;7 8;6 7;5 6;4 5;3 4;2 3;1 2];
+            app.Gauge.FontSize = 9;
+            app.Gauge.FontWeight = 'bold';
+            app.Gauge.FontColor = [0.451 0 0.0392];
+            app.Gauge.Position = [1 5 321 321];
+
+            % Show the figure after all components are created
+            app.UIFigure.Visible = 'on';
+        end
+    end
+
+    % App creation and deletion
+    methods (Access = public)
+
+        % Construct app
+        function app = FinalProject
+
+            % Create UIFigure and components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
